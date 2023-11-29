@@ -1,0 +1,6 @@
+[allowlist]
+paths = [
+  '''(^|\/)examples\/''',
+  '''(^|\/)scan\/unstaged_test.go$''',
+  '''(^|\/)testdata\/''',
+]
