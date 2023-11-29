@@ -24,18 +24,18 @@ build: format
 	golint ./...
 	go vet ./...
 	go mod tidy
-	go build $(LDFLAGS)
+	go build $(LDFLAGS) -o gitleaks7
 
 release-builds:
 	rm -rf build
 	mkdir build
-	env GOOS="windows" GOARCH="amd64" go build -o "build/gitleaks-windows-amd64.exe" $(LDFLAGS)
-	env GOOS="windows" GOARCH="386" go build -o "build/gitleaks-windows-386.exe" $(LDFLAGS)
-	env GOOS="linux" GOARCH="amd64" go build -o "build/gitleaks-linux-amd64" $(LDFLAGS)
-	env GOOS="linux" GOARCH="arm" go build -o "build/gitleaks-linux-arm" $(LDFLAGS)
-	env GOOS="linux" GOARCH="mips" go build -o "build/gitleaks-linux-mips" $(LDFLAGS)
-	env GOOS="linux" GOARCH="mips" go build -o "build/gitleaks-linux-mips" $(LDFLAGS)
-	env GOOS="darwin" GOARCH="amd64" go build -o "build/gitleaks-darwin-amd64" $(LDFLAGS)
+	env GOOS="windows" GOARCH="amd64" go build -o "build/gitleaks7-windows-amd64.exe" $(LDFLAGS)
+	env GOOS="windows" GOARCH="386" go build -o "build/gitleaks7-windows-386.exe" $(LDFLAGS)
+	env GOOS="linux" GOARCH="amd64" go build -o "build/gitleaks7-linux-amd64" $(LDFLAGS)
+	env GOOS="linux" GOARCH="arm" go build -o "build/gitleaks7-linux-arm" $(LDFLAGS)
+	env GOOS="linux" GOARCH="mips" go build -o "build/gitleaks7-linux-mips" $(LDFLAGS)
+	env GOOS="linux" GOARCH="mips" go build -o "build/gitleaks7-linux-mips" $(LDFLAGS)
+	env GOOS="darwin" GOARCH="amd64" go build -o "build/gitleaks7-darwin-amd64" $(LDFLAGS)
 
 deploy:
 	@echo "$(DOCKER_PASSWORD)" | docker login -u "$(DOCKER_USERNAME)" --password-stdin
@@ -47,4 +47,4 @@ dockerbuild:
 	docker build --build-arg ldflags=$(_LDFLAGS) -f Dockerfile -t zricethezav/gitleaks:latest -t zricethezav/gitleaks:$(VERSION) .
 
 install:
-	install -D ./gitleaks $(DESTDIR)$(PREFIX)/bin/gitleaks7
+	install -D ./gitleaks7 $(DESTDIR)$(PREFIX)/bin/gitleaks7
