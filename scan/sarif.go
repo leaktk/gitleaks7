@@ -7,74 +7,74 @@ import (
 	"github.com/zricethezav/gitleaks/v7/config"
 )
 
-//Sarif ...
+// Sarif ...
 type Sarif struct {
 	Schema  string `json:"$schema"`
 	Version string `json:"version"`
 	Runs    []Runs `json:"runs"`
 }
 
-//ShortDescription ...
+// ShortDescription ...
 type ShortDescription struct {
 	Text string `json:"text"`
 }
 
-//FullDescription ...
+// FullDescription ...
 type FullDescription struct {
 	Text string `json:"text"`
 }
 
-//Rules ...
+// Rules ...
 type Rules struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
-//Driver ...
+// Driver ...
 type Driver struct {
 	Name            string  `json:"name"`
 	SemanticVersion string  `json:"semanticVersion"`
 	Rules           []Rules `json:"rules"`
 }
 
-//Tool ...
+// Tool ...
 type Tool struct {
 	Driver Driver `json:"driver"`
 }
 
-//Message ...
+// Message ...
 type Message struct {
 	Text string `json:"text"`
 }
 
-//ArtifactLocation ...
+// ArtifactLocation ...
 type ArtifactLocation struct {
 	URI string `json:"uri"`
 }
 
-//Region ...
+// Region ...
 type Region struct {
 	StartLine int     `json:"startLine"`
 	Snippet   Snippet `json:"snippet"`
 }
 
-//Snippet ...
+// Snippet ...
 type Snippet struct {
 	Text string `json:"text"`
 }
 
-//PhysicalLocation ...
+// PhysicalLocation ...
 type PhysicalLocation struct {
 	ArtifactLocation ArtifactLocation `json:"artifactLocation"`
 	Region           Region           `json:"region"`
 }
 
-//Locations ...
+// Locations ...
 type Locations struct {
 	PhysicalLocation PhysicalLocation `json:"physicalLocation"`
 }
 
-//Results ...
+// Results ...
 type Results struct {
 	Message    Message          `json:"message"`
 	RuleId     string           `json:"ruleId"`
@@ -82,7 +82,7 @@ type Results struct {
 	Locations  []Locations      `json:"locations"`
 }
 
-//ResultProperties ...
+// ResultProperties ...
 type ResultProperties struct {
 	Commit        string    `json:"commit"`
 	Offender      string    `json:"offender"`
@@ -93,7 +93,7 @@ type ResultProperties struct {
 	Repo          string    `json:"repo"`
 }
 
-//Runs ...
+// Runs ...
 type Runs struct {
 	Tool    Tool      `json:"tool"`
 	Results []Results `json:"results"`

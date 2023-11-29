@@ -1,86 +1,29 @@
+# Gitleaks 7
 
-```
-○
-│╲
-│ ○
-○ ░
-░    gitleaks 
-```
-
-
-<p align="left">
-  <p align="left">
-	  <a href="https://github.com/zricethezav/gitleaks/actions/workflows/test.yml">
-		  <img alt="Github Test" src="https://github.com/zricethezav/gitleaks/actions/workflows/test.yml/badge.svg">
-	  </a>
-	  <a href="https://hub.docker.com/r/zricethezav/gitleaks">
-		  <img src="https://img.shields.io/docker/pulls/zricethezav/gitleaks.svg" />
-	  </a>
-	  <a href="https://twitter.com/intent/follow?screen_name=zricethezav">
-		  <img src="https://img.shields.io/twitter/follow/zricethezav?label=Follow%20zricethezav&style=social&color=blue" alt="Follow @zricethezav" />
-	  </a>
-  </p>
-</p>
+A copy of [gitleaks-7.6.1](https://github.com/gitleaks/gitleaks/tree/v7.6.1)
+for use in this project until it rebases on gitleaks version >= 8. This
+project mainly exists to support backporting a few features, fixes and to
+enable packaging.
 
 Gitleaks is a SAST tool for detecting hardcoded secrets like passwords, api keys, and tokens in git repos. Gitleaks is an **easy-to-use, all-in-one solution** for finding secrets, past or present, in your code.
 
-### [Introduction Video](https://www.youtube.com/watch?v=VUq2eII20S4)
-
-
-### Features:
-- Scan for [commited](https://github.com/zricethezav/gitleaks#Scanning) secrets
-- Scan for [unstaged](https://github.com/zricethezav/gitleaks#scan-unstaged-changes) secrets to shift security left
-- Scan [directories and files](https://github.com/zricethezav/gitleaks#scan-local-directory)
-- Run [Gitleaks Action](https://github.com/marketplace/actions/gitleaks) in your CI/CD pipeline
-- [Custom rules](https://github.com/zricethezav/gitleaks#configuration) via toml configuration
-- Increased performance using [go-git](https://github.com/go-git/go-git)
-- json, sarif, and csv reporting
-- Private repo scans using key or password based authentication
-
 
 ### Installation
-Gitleaks can be installed using Homebrew, Docker, or Go. Gitleaks is also available in binary form for many popular platforms and OS types on the [releases page](https://github.com/zricethezav/gitleaks/releases). In addition, Gitleaks can be implemented as a pre-commit hook directly in your repo.
 
-##### MacOS
+This section is a work in progress for this copy of the tool
 
-```bash
-brew install gitleaks
-```
-
-##### Docker
+##### Makefile
 
 ```bash
-# To just pull the image
-docker pull zricethezav/gitleaks:latest
-# To run it from your cloned repo
-cd to/your/repo/
-docker run -v ${PWD}:/my-repo zricethezav/gitleaks:latest --path="/my-repo" [OPTIONS]
-```
-
-##### Go
-```bash
-GO111MODULE=on go get github.com/zricethezav/gitleaks/v7
-```
-##### As a pre-commit hook
-
-See [pre-commit](https://github.com/pre-commit/pre-commit) for instructions.
-
-Sample `.pre-commit-config.yaml`
-
-```yaml
-# The revision doesn't get updated manually
-# check this https://github.com/zricethezav/gitleaks/releases
-# to see if there are newer versions
--   repo: https://github.com/zricethezav/gitleaks
-    rev: v7.6.0
-    hooks:
-    -   id: gitleaks
+make build
+sudo make install
 ```
 
 ### Usage and Options
+
 ```
 Usage:
-  gitleaks [OPTIONS]
+  gitleaks7 [OPTIONS]
 
 Application Options:
   -v, --verbose             Show verbose output from scan
@@ -118,65 +61,85 @@ Help Options:
   -h, --help                Show this help message
 ```
 
-
-### [Scanning](https://www.youtube.com/watch?v=WUzpRL8mKCk)
+### Scanning
 
 #### Basic repo-url scan:
-This scans the entire history of tests/secrets and logs leaks as they are encountered `-v`/`--verbose` being set.
+
+This scans the entire history of tests/secrets and logs leaks as they are
+encountered `-v`/`--verbose` being set.
+
 ```bash
-gitleaks --repo-url=https://github.com/my-insecure/repo -v
+gitleaks7 --repo-url=https://github.com/my-insecure/repo -v
 ```
 
-
 #### Basic repo-url scan output to a report:
+
 If you want the report in sarif or csv you can set the `-f/--format` option
+
 ```bash
-gitleaks --repo-url=https://github.com/my-insecure/repo -v --report=my-report.json
+gitleaks7 --repo-url=https://github.com/my-insecure/repo -v --report=my-report.json
 ```
 
 #### Scan specific commit:
+
 ```bash
-gitleaks --repo-url=https://github.com/my-insecure/repo --commit=commit-sha -v
+gitleaks7 --repo-url=https://github.com/my-insecure/repo --commit=commit-sha -v
 ```
 
 #### Scan local repo:
+
 ```bash
-gitleaks --path=path/to/local/repo -v
+gitleaks7 --path=path/to/local/repo -v
 ```
 
 #### Scan repos contained in a parent directory:
-If you have `repo1`, `repo2`, `repo3` all under `path/to/local`, gitleaks will discover and scan those repos.
+
+If you have `repo1`, `repo2`, `repo3` all under `path/to/local`, gitleaks will
+discover and scan those repos.
+
 ```bash
-gitleaks --path=path/to/local/ -v
+gitleaks7 --path=path/to/local/ -v
 ```
 
 #### Scan local directory:
-If you want to scan the current contents of a repo, ignoring git alltogether. You can use the `--no-git` option to do this.
+
+If you want to scan the current contents of a repo, ignoring git alltogether.
+You can use the `--no-git` option to do this.
+
 ```bash
-gitleaks --path=path/to/local/repo -v --no-git
+gitleaks7 --path=path/to/local/repo -v --no-git
 ```
 
 #### Scan a file:
-Or if you want to scan a single file using gitleaks rules. You can do this by specifying the file in `--path` and including the `--no-git` option.
+
+Or if you want to scan a single file using gitleaks rules. You can do this by
+specifying the file in `--path` and including the `--no-git` option.
+
 ```bash
-gitleaks --path=path/to/local/repo/main.go -v --no-git
+gitleaks7 --path=path/to/local/repo/main.go -v --no-git
 ```
 
 #### Scan unstaged changes:
-If you have unstaged changes are are currently at the root of the repo, you can run `gitleaks` with no `--path` or `--repo-url` specified which will run a scan on your uncommitted changes. Or if you want to specify a
-path, you can run:
+
+If you have unstaged changes are are currently at the root of the repo, you can
+run `gitleaks7` with no `--path` or `--repo-url` specified which will run a scan
+on your uncommitted changes. Or if you want to specify a path, you can run:
+
 ```bash
-gitleaks --path=path/to/local/repo -v --unstaged
+gitleaks7 --path=path/to/local/repo -v --unstaged
 ```
 
-
 ### Configuration
-Provide your own gitleaks configurations with `--config-path` or `--repo-config-path`. `--config-path` loads a local gitleaks configuration whereas `--repo-config-path` will load a configuration present just in the repo you want to scan. For example, `gitleaks --repo-config-path=".github/gitleaks.config"`.
-The default configuration Gitleaks uses is located [here](https://github.com/zricethezav/gitleaks/blob/master/config/gitleaks.toml). More configuration examples can be seen [here](https://github.com/zricethezav/gitleaks/tree/master/examples). Configuration files will contain a few different toml tables. Further explanation is provided below.
+
+Provide your own gitleaks configurations with `--config-path` or
+`--repo-config-path`. `--config-path` loads a local gitleaks configuration
+whereas `--repo-config-path` will load a configuration present just in the repo
+you want to scan. For example, `gitleaks --repo-config-path=".github/gitleaks.config"`.
 
 ### Rules summary
 
-The rules are written in [TOML](https://github.com/toml-lang/toml) as defined in [TomlLoader struct](https://github.com/zricethezav/gitleaks/blob/master/config/config.go#L57-L87), and can be summarized as:
+The rules are written in [TOML](https://github.com/toml-lang/toml) as defined
+in [TomlLoader struct](./config/config.go#L57-L87), and can be summarized as:
 
 ```toml
 [[rules]]
@@ -205,20 +168,28 @@ The rules are written in [TOML](https://github.com/toml-lang/toml) as defined in
   regexes = ['''one-regex-within-the-already-matched-regex''']
 ```
 
-Regular expressions are _NOT_ the full Perl set, so there are no look-aheads or look-behinds.
-
+Regular expressions are _NOT_ the full Perl set, so there are no look-aheads or
+look-behinds.
 
 ### Examples
+
 #### Example 1
-The first and most commonly edited array of tables is `[[rules]]`. This is where you can define your own custom rules for Gitleaks to use while scanning repos. Example keys/values within the `[[rules]]` table:
+
+The first and most commonly edited array of tables is `[[rules]]`. This is
+where you can define your own custom rules for Gitleaks to use while scanning
+repos. Example keys/values within the `[[rules]]` table:
+
 ```toml
 [[rules]]
   description = "generic secret regex"
   regex = '''secret(.{0,20})([0-9a-zA-Z-._{}$\/\+=]{20,120})'''
   tags = ["secret", "example"]
 ```
+
 #### Example 2
+
 We can also **combine** regular expressions AND entropy:
+
 ```toml
 [[rules]]
   description = "entropy and regex example"
@@ -227,18 +198,32 @@ We can also **combine** regular expressions AND entropy:
     Min = "4.5"
     Max = "4.7"
 ```
-Translating this rule to English, this rule states: "if we encounter a line of code that matches *regex* AND the line falls within the bounds of a [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) of 4.5 to 4.7, then the line must be a leak"
+Translating this rule to English, this rule states: "if we encounter a line of
+code that matches *regex* AND the line falls within the bounds of a
+[Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory))
+of 4.5 to 4.7, then the line must be a leak"
 
 #### Example 3
+
 Let's compare two lines of code:
+
 ```
 aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'
 ```
+
 and
+
 ```
 aws_secret=os.getenv('AWS_SECRET_ACCESS_KEY')
 ```
-The first line of code is an example of a hardcoded secret being assigned to the variable `aws_secret`. The second line of code is an example of a secret being assigned via env variables to `aws_secret`. Both would be caught by the rule defined in *example 2* but only the first line is actually a leak. Let's define a new rule that will capture only the first line of code. We can do this by combining regular expression **groups** and entropy.
+
+The first line of code is an example of a hardcoded secret being assigned to
+the variable `aws_secret`. The second line of code is an example of a secret
+being assigned via env variables to `aws_secret`. Both would be caught by the
+rule defined in *example 2* but only the first line is actually a leak. Let's
+define a new rule that will capture only the first line of code. We can do this
+by combining regular expression **groups** and entropy.
+
 ```toml
 [[rules]]
   description = "entropy and regex example"
@@ -248,20 +233,28 @@ The first line of code is an example of a hardcoded secret being assigned to the
     Max = "4.7"
     Group = "2"
 ```
-Notice how we added `Group = "2"` to this rule. We can translate this rule to English: "if we encounter a line of code that matches regex AND the entropy of the *second regex group* falls within the bounds of a [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) of 4.5 to 4.7, then the line must be a leak"
+
+Notice how we added `Group = "2"` to this rule. We can translate this rule to
+English: "if we encounter a line of code that matches regex AND the entropy of
+the *second regex group* falls within the bounds of a
+[Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory))
+of 4.5 to 4.7, then the line must be a leak"
 
 ### Example 4: Using allowlist regex
 
 The proper Perl regex for AWS secret keys is
 `(?<![A-Za-z0-9\\+])[A-Za-z0-9\\+=]{40}(?![A-Za-z0-9\\+=])`
-but the Go library doesn't do lookahead/lookbehind, so
-we'll look for 40 base64 characters, then allowlist
-if they're embedded in a string of 41 base64 characters, that is,
-without any delimiters. This will make a false negative for, say:
+but the Go library doesn't do lookahead/lookbehind, so we'll look for 40 base64
+characters, then allowlist if they're embedded in a string of 41 base64
+characters, that is, without any delimiters. This will make a false negative
+for, say:
+
 ```
     foo=+awsSecretAccessKeyisBase64=40characters
 ```
+
 So you can use the following to effectively create the proper Perl regex:
+
 ```toml
 [[rules]]
   description = "AWS secret key regardless of labeling"
@@ -273,23 +266,17 @@ So you can use the following to effectively create the proper Perl regex:
 
 
 ### Exit Codes
-You can always set the exit code when leaves are encountered with the `--leaks-exit-code` flag. Default exit codes below:
+
+You can always set the exit code when leaves are encountered with the
+`--leaks-exit-code` flag.
+
+Default exit codes below:
+
 ```
 0 - no leaks present
 1 - leaks or error encountered
 ```
 
-###  Sponsors ❤️
-#### Organization Sponsors
-Sir, ehm, this is uhh... this is empty [😭](https://www.youtube.com/watch?v=w1o4O2SfQ5g)
-
-#### Individual Sponsors
-These users are [sponsors](https://github.com/sponsors/zricethezav) of gitleaks:
-
-- [Adam Shannon](https://github.com/adamdecaf)
-- [ProjectDiscovery](https://projectdiscovery.io/#/)
-- [Ben "Ihavespoons"](https://github.com/ihavespoons)
-- [Henry Sachs](https://github.com/henrysachs)
-
 #### Logo Attribution
+
 The Gitleaks logo uses the Git Logo created <a href="https://twitter.com/jasonlong">Jason Long</a> is licensed under the <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.

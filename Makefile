@@ -1,10 +1,11 @@
 .PHONY: test test-cover build release-builds
 
-VERSION := `git fetch --tags && git tag | sort -V | tail -1`
+VERSION := 7.6.1
 PKG=github.com/zricethezav/gitleaks
 LDFLAGS=-ldflags "-X=github.com/zricethezav/gitleaks/v7/version.Version=$(VERSION)"
 _LDFLAGS="github.com/zricethezav/gitleaks/v7/version.Version=$(VERSION)"
 COVER=--cover --coverprofile=cover.out
+PREFIX := /usr/local
 
 test-cover:
 	go test ./... --race $(COVER) $(PKG) -v
@@ -44,3 +45,6 @@ deploy:
 
 dockerbuild:
 	docker build --build-arg ldflags=$(_LDFLAGS) -f Dockerfile -t zricethezav/gitleaks:latest -t zricethezav/gitleaks:$(VERSION) .
+
+install:
+	install -D ./gitleaks $(DESTDIR)$(PREFIX)/bin/gitleaks7
