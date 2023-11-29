@@ -6,10 +6,13 @@ PKG=github.com/zricethezav/gitleaks
 LDFLAGS=-ldflags "-X=github.com/zricethezav/gitleaks/v7/version.Version=$(VERSION)"
 _LDFLAGS="github.com/zricethezav/gitleaks/v7/version.Version=$(VERSION)"
 COVER=--cover --coverprofile=cover.out
-PREFIX := /usr/local
+PREFIX := /usr
+INSTALL := install
+
+all: clean build
 
 clean:
-	git clean -Xfd
+	if [[ -e .git ]]; then git clean -Xfd; fi
 
 test-cover:
 	go test ./... --race $(COVER) $(PKG) -v
@@ -41,14 +44,5 @@ release-builds:
 	env GOOS="linux" GOARCH="mips" go build -o "build/gitleaks7-linux-mips" $(LDFLAGS)
 	env GOOS="darwin" GOARCH="amd64" go build -o "build/gitleaks7-darwin-amd64" $(LDFLAGS)
 
-deploy:
-	@echo "$(DOCKER_PASSWORD)" | docker login -u "$(DOCKER_USERNAME)" --password-stdin
-	docker build --build-arg ldflags=$(_LDFLAGS) -f Dockerfile -t zricethezav/gitleaks:latest -t zricethezav/gitleaks:$(VERSION) .
-	echo "Pushing zricethezav/gitleaks:$(VERSION) and zricethezav/gitleaks:latest"
-	docker push zricethezav/gitleaks
-
-dockerbuild:
-	docker build --build-arg ldflags=$(_LDFLAGS) -f Dockerfile -t zricethezav/gitleaks:latest -t zricethezav/gitleaks:$(VERSION) .
-
 install:
-	install -D ./gitleaks7 $(DESTDIR)$(PREFIX)/bin/gitleaks7
+	$(INSTALL) -D ./gitleaks7 $(DESTDIR)$(PREFIX)/bin/gitleaks7
