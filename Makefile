@@ -8,6 +8,9 @@ _LDFLAGS="github.com/zricethezav/gitleaks/v7/version.Version=$(VERSION)"
 COVER=--cover --coverprofile=cover.out
 PREFIX := /usr/local
 
+clean:
+	git clean -Xfd
+
 test-cover:
 	go test ./... --race $(COVER) $(PKG) -v
 	go tool cover -html=cover.out
