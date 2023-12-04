@@ -37,6 +37,23 @@ func NewUnstagedScanner(opts options.Options, cfg config.Config, repo *git.Repos
 	}
 	return us
 }
+func GitStatus(path string) ([]string, error) {
+	cmd := exec.Command("git", "status", "--porcelain")
+	cmd.Dir = path
+	out, err := cmd.Output()
+	if err != nil {
+		return nil, err
+	}
+	lines := strings.Split(strings.ReplaceAll(string(out), "\r\n", "\n"), "\n")
+	var files []string
+	for _, line := range lines {
+		if len(line) > 0 && !strings.HasPrefix(line, "??") && !strings.HasPrefix(line, "??") {
+			r := []rune(line)
+			files = append(files, string(r[3:]))
+		}
+	}
+	return files, nil
+}
 
 // Scan kicks off an unstaged scan. This will attempt to determine unstaged changes which are then scanned.
 func (us *UnstagedScanner) Scan() (Report, error) {
@@ -47,12 +64,11 @@ func (us *UnstagedScanner) Scan() (Report, error) {
 		if err != nil {
 			return scannerReport, err
 		}
-
-		status, err := wt.Status()
+		status, err := GitStatus(wt.Filesystem.Root())
 		if err != nil {
 			return scannerReport, err
 		}
-		for fn := range status {
+		for _, fn := range status {
 			workTreeBuf := bytes.NewBuffer(nil)
 			workTreeFile, err := wt.Filesystem.Open(fn)
 			if err != nil {
@@ -117,6 +133,7 @@ func (us *UnstagedScanner) Scan() (Report, error) {
 				}
 			}
 		}
+
 		return scannerReport, nil
 	} else if err != nil {
 		return scannerReport, err
