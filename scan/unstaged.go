@@ -48,8 +48,12 @@ func GitStatus(path string) ([]string, error) {
 	var files []string
 	for _, line := range lines {
 		if len(line) > 0 && !strings.HasPrefix(line, "??") && !strings.HasPrefix(line, "??") {
-			r := []rune(line)
-			files = append(files, string(r[3:]))
+			r := string([]rune(line)[3:])
+			if strings.Contains(r, "->") {
+				split := strings.Split(r, "->")
+				r = strings.TrimSpace(split[1])
+			}
+			files = append(files, r)
 		}
 	}
 	return files, nil
