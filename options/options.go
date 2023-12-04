@@ -78,7 +78,7 @@ func ParseOptions() (Options, error) {
 		if version.Version == "" {
 			fmt.Println("Gitleaks uses LDFLAGS to pull most recent version. Build with 'make build' for version")
 		} else {
-			fmt.Printf("leaktk-gitleaks7-%s (gitleaks 7.6.1 compatible)\n", version.Version)
+			fmt.Printf("leaktk-gitleaks7-%s (gitleaks-7.6.1 compatible)\n", version.Version)
 		}
 		os.Exit(0)
 	}
