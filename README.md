@@ -1,4 +1,4 @@
-# leaktk-gitleaks7
+# LeakTK-Gitleaks7
 
 A [gitleaks 7.6.1](https://github.com/gitleaks/gitleaks/tree/v7.6.1)
 compatible binary for use in the LeakTK project until it rebases on gitleaks
