@@ -47,8 +47,7 @@ func (us *UnstagedScanner) Scan() (Report, error) {
 		if err != nil {
 			return scannerReport, err
 		}
-
-		status, err := wt.Status()
+		status, err := gitStatus(wt, true)
 		if err != nil {
 			return scannerReport, err
 		}
@@ -117,6 +116,7 @@ func (us *UnstagedScanner) Scan() (Report, error) {
 				}
 			}
 		}
+
 		return scannerReport, nil
 	} else if err != nil {
 		return scannerReport, err
@@ -143,7 +143,7 @@ func (us *UnstagedScanner) Scan() (Report, error) {
 		return scannerReport, err
 	}
 
-	status, err := gitStatus(wt)
+	status, err := gitStatus(wt, false)
 	if err != nil {
 		return scannerReport, err
 	}
@@ -268,7 +268,7 @@ func diffPrettyText(diffs []diffmatchpatch.Diff) string {
 
 // gitStatus returns the status of modified files in the worktree. It will attempt to execute 'git status'
 // and will fall back to git.Worktree.Status() if that fails.
-func gitStatus(wt *git.Worktree) (git.Status, error) {
+func gitStatus(wt *git.Worktree, staggedOnly bool) (git.Status, error) {
 	c := exec.Command("git", "status", "--porcelain", "-z")
 	c.Dir = wt.Filesystem.Root()
 	output, err := c.Output()
@@ -287,11 +287,16 @@ func gitStatus(wt *git.Worktree) (git.Status, error) {
 		// For copy/rename the output looks like
 		//   R  destination\000source
 		// Which means we can split on space and ignore anything with only one result
+		x := line[0] // Status code of index (what has changed)
 		parts := strings.SplitN(strings.TrimLeft(line, " "), " ", 2)
 		if len(parts) == 2 {
+			if staggedOnly && !strings.ContainsAny(string(x), "MADRCU") {
+				continue
+			}
 			stat[strings.Trim(parts[1], " ")] = &git.FileStatus{
 				Staging: git.StatusCode([]byte(parts[0])[0]),
 			}
+
 		}
 	}
 	return stat, err
