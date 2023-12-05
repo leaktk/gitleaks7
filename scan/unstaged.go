@@ -273,7 +273,7 @@ func gitStatus(wt *git.Worktree, staggedOnly bool) (git.Status, error) {
 	c.Dir = wt.Filesystem.Root()
 	output, err := c.Output()
 	if err != nil {
-		stat, _ := wt.Status()
+		stat, err := wt.Status()
 		return stat, err
 	}
 
@@ -287,8 +287,7 @@ func gitStatus(wt *git.Worktree, staggedOnly bool) (git.Status, error) {
 		// For copy/rename the output looks like
 		//   R  destination\000source
 		// Which means we can split on space and ignore anything with only one result
-		x := line[0] // Merge (added to the change)
-		//y := line[1] // Workingtree (modified by not added to change)
+		x := line[0] // Status code of index (what has changed)
 		parts := strings.SplitN(strings.TrimLeft(line, " "), " ", 2)
 		if len(parts) == 2 {
 			if staggedOnly && !strings.ContainsAny(string(x), "MADRCU") {
