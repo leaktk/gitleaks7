@@ -1,11 +1,13 @@
-# Gitleaks 7
+# LeakTK-Gitleaks7
 
-A copy of [gitleaks-7.6.1](https://github.com/gitleaks/gitleaks/tree/v7.6.1)
-for use in this project until it rebases on gitleaks version >= 8. This
-project mainly exists to support backporting a few features, fixes and to
-enable packaging.
+A [gitleaks 7.6.1](https://github.com/gitleaks/gitleaks/tree/v7.6.1)
+compatible binary for use in the LeakTK project until it rebases on gitleaks
+version >= 8. This project mainly exists to support backporting a few features,
+fixes and to enable packaging.
 
-Gitleaks is a SAST tool for detecting hardcoded secrets like passwords, api keys, and tokens in git repos. Gitleaks is an **easy-to-use, all-in-one solution** for finding secrets, past or present, in your code.
+Gitleaks is a SAST tool for detecting hardcoded secrets like passwords, api
+keys, and tokens in git repos. Gitleaks is an **easy-to-use, all-in-one
+solution** for finding secrets, past or present, in your code.
 
 
 ### Installation
