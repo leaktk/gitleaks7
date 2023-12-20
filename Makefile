@@ -2,8 +2,8 @@
 
 VERSION := 1.1.0
 PKG=github.com/zricethezav/gitleaks
-LDFLAGS=-ldflags "-X=github.com/zricethezav/gitleaks/v7/version.Version=$(VERSION)"
-_LDFLAGS="github.com/zricethezav/gitleaks/v7/version.Version=$(VERSION)"
+LDFLAGS=-ldflags "-X=github.com/leaktk/gitleaks7/v2/version.Version=$(VERSION)"
+_LDFLAGS="github.com/leaktk/gitleaks7/v2/version.Version=$(VERSION)"
 COVER=--cover --coverprofile=cover.out
 PREFIX := /usr
 INSTALL := install

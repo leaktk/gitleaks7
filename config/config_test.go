@@ -8,8 +8,8 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/zricethezav/gitleaks/v7/config"
-	"github.com/zricethezav/gitleaks/v7/options"
+	"github.com/leaktk/gitleaks7/v2/config"
+	"github.com/leaktk/gitleaks7/v2/options"
 )
 
 const configPath = "../testdata/configs/"

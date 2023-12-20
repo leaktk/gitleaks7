@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/zricethezav/gitleaks/v7/config"
+	"github.com/leaktk/gitleaks7/v2/config"
 )
 
 // Sarif ...
