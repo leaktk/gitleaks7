@@ -1,6 +1,6 @@
 .PHONY: test test-cover build release-builds
 
-VERSION := 1.1.0
+VERSION := 2.0.0
 PKG=github.com/zricethezav/gitleaks
 LDFLAGS=-ldflags "-X=github.com/leaktk/gitleaks7/v2/version.Version=$(VERSION)"
 _LDFLAGS="github.com/leaktk/gitleaks7/v2/version.Version=$(VERSION)"
