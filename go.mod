@@ -1,4 +1,4 @@
-module github.com/zricethezav/gitleaks/v7
+module github.com/leaktk/gitleaks7/v2
 
 go 1.16
 

@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/zricethezav/gitleaks/v7/scan"
+	"github.com/leaktk/gitleaks7/v2/scan"
 )
 
 const repoBasePath = "../testdata/repos/"

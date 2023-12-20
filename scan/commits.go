@@ -4,8 +4,8 @@ import (
 	"github.com/go-git/go-git/v5"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/zricethezav/gitleaks/v7/config"
-	"github.com/zricethezav/gitleaks/v7/options"
+	"github.com/leaktk/gitleaks7/v2/config"
+	"github.com/leaktk/gitleaks7/v2/options"
 )
 
 // CommitsScanner is a commit scanner

@@ -3,7 +3,7 @@ package scan
 import (
 	"runtime"
 
-	"github.com/zricethezav/gitleaks/v7/options"
+	"github.com/leaktk/gitleaks7/v2/options"
 )
 
 const (

@@ -6,8 +6,8 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/zricethezav/gitleaks/v7/config"
-	"github.com/zricethezav/gitleaks/v7/options"
+	"github.com/leaktk/gitleaks7/v2/config"
+	"github.com/leaktk/gitleaks7/v2/options"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/object"

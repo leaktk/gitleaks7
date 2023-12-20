@@ -4,9 +4,9 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/zricethezav/gitleaks/v7/options"
+	"github.com/leaktk/gitleaks7/v2/options"
 
-	"github.com/zricethezav/gitleaks/v7/config"
+	"github.com/leaktk/gitleaks7/v2/config"
 
 	"github.com/go-git/go-git/v5"
 	log "github.com/sirupsen/logrus"

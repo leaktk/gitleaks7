@@ -1,9 +1,9 @@
 .PHONY: test test-cover build release-builds
 
-VERSION := 1.0.0
+VERSION := 2.0.0
 PKG=github.com/zricethezav/gitleaks
-LDFLAGS=-ldflags "-X=github.com/zricethezav/gitleaks/v7/version.Version=$(VERSION)"
-_LDFLAGS="github.com/zricethezav/gitleaks/v7/version.Version=$(VERSION)"
+LDFLAGS=-ldflags "-X=github.com/leaktk/gitleaks7/v2/version.Version=$(VERSION)"
+_LDFLAGS="github.com/leaktk/gitleaks7/v2/version.Version=$(VERSION)"
 COVER=--cover --coverprofile=cover.out
 PREFIX := /usr
 INSTALL := install
@@ -21,10 +21,12 @@ format:
 	go fmt ./...
 
 test: format
+	go mod tidy
 	go get golang.org/x/lint/golint
 	go vet ./...
 	golint ./...
 	go test ./... --race $(PKG) -v
+	go mod tidy
 
 build: format
 	golint ./...
