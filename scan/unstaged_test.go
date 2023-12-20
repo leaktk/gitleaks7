@@ -26,7 +26,7 @@ func TestUnstaged(t *testing.T) {
 		empty        bool
 	}{
 		{
-			description: "basic repo with unstagged change containing a secret",
+			description: "basic repo with unstaged change containing a secret",
 			opts: options.Options{
 				Path:         filepath.Join(repoBasePath, "basic"),
 				Report:       filepath.Join(expectPath, "basic", "results_unstaged.json.got"),
@@ -38,7 +38,7 @@ func TestUnstaged(t *testing.T) {
 			change:       "\nadded_aws_access_key_id='AKIAIO5FODNN7DXAMPLE'\n",
 		},
 		{
-			description: "basic repo with unstagged change not containing a secret",
+			description: "basic repo with unstaged change not containing a secret",
 			opts: options.Options{
 				Path:         filepath.Join(repoBasePath, "basic"),
 				Report:       filepath.Join(expectPath, "basic", "results_unstaged.json.got"),

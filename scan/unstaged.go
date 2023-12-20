@@ -268,7 +268,7 @@ func diffPrettyText(diffs []diffmatchpatch.Diff) string {
 
 // gitStatus returns the status of modified files in the worktree. It will attempt to execute 'git status'
 // and will fall back to git.Worktree.Status() if that fails.
-func gitStatus(wt *git.Worktree, staggedOnly bool) (git.Status, error) {
+func gitStatus(wt *git.Worktree, stagedOnly bool) (git.Status, error) {
 	c := exec.Command("git", "status", "--porcelain", "-z")
 	c.Dir = wt.Filesystem.Root()
 	output, err := c.Output()
@@ -290,7 +290,7 @@ func gitStatus(wt *git.Worktree, staggedOnly bool) (git.Status, error) {
 		x := line[0] // Status code of index (what has changed)
 		parts := strings.SplitN(strings.TrimLeft(line, " "), " ", 2)
 		if len(parts) == 2 {
-			if staggedOnly && !strings.ContainsAny(string(x), "MADRCU") {
+			if stagedOnly && !strings.ContainsAny(string(x), "MADRCU") {
 				continue
 			}
 			stat[strings.Trim(parts[1], " ")] = &git.FileStatus{
