@@ -16,6 +16,8 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/sergi/go-diff/diffmatchpatch"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // UnstagedScanner is an unstaged scanner. This is the scanner used when you don't provide program arguments
@@ -162,6 +164,11 @@ func (us *UnstagedScanner) Scan() (Report, error) {
 				//check if file is symlink
 			} else if fc, err := os.Readlink(fn); err == nil {
 				currFileContents = fc
+			} else if fileInfo, err := os.Stat(fn); err == nil && fileInfo.IsDir() {
+				// For git status to show it as it's own listing and it be a directory
+				// it seems like it would be a submodule
+				log.Warning("skipping modified submodule: " + fn)
+				continue
 			} else {
 				workTreeBuf := bytes.NewBuffer(nil)
 				workTreeFile, err := wt.Filesystem.Open(fn)
