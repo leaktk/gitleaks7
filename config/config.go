@@ -1,6 +1,7 @@
 package config
 
 import (
+	// embed is used here for go:embed gitleaks.toml
 	_ "embed"
 	"fmt"
 	"io"
@@ -17,6 +18,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// DefaultConfig is an embeded gitleaks.toml
+//
 //go:embed gitleaks.toml
 var DefaultConfig string
 

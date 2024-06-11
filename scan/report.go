@@ -33,65 +33,64 @@ func WriteReport(report Report, opts options.Options, cfg config.Config) error {
 
 	if opts.Report == "" {
 		return nil
-	} else {
-		if opts.Redact {
-			var redactedLeaks []Leak
-			for _, leak := range report.Leaks {
-				redactedLeaks = append(redactedLeaks, RedactLeak(leak))
-			}
-			report.Leaks = redactedLeaks
+	}
+	if opts.Redact {
+		var redactedLeaks []Leak
+		for _, leak := range report.Leaks {
+			redactedLeaks = append(redactedLeaks, RedactLeak(leak))
 		}
+		report.Leaks = redactedLeaks
+	}
 
-		file, err := os.Create(opts.Report)
+	file, err := os.Create(opts.Report)
+	if err != nil {
+		return err
+	}
+	defer rable(file.Close)
+
+	switch strings.ToLower(opts.ReportFormat) {
+	case "json":
+		encoder := json.NewEncoder(file)
+		encoder.SetIndent("", " ")
+		err = encoder.Encode(report.Leaks)
 		if err != nil {
 			return err
 		}
-		defer rable(file.Close)
-
-		switch strings.ToLower(opts.ReportFormat) {
-		case "json":
-			encoder := json.NewEncoder(file)
-			encoder.SetIndent("", " ")
-			err = encoder.Encode(report.Leaks)
+	case "csv":
+		w := csv.NewWriter(file)
+		err = w.Write([]string{"repo", "line", "commit", "offender", "leakURL", "rule", "tags", "commitMsg", "author", "email", "file", "date"})
+		if err != nil {
+			return err
+		}
+		for _, leak := range report.Leaks {
+			err := w.Write([]string{leak.Repo, leak.Line, leak.Commit, leak.Offender, leak.LeakURL, leak.Rule, leak.Tags, leak.Message, leak.Author, leak.Email, leak.File, leak.Date.Format(time.RFC3339)})
 			if err != nil {
 				return err
 			}
-		case "csv":
-			w := csv.NewWriter(file)
-			err = w.Write([]string{"repo", "line", "commit", "offender", "leakURL", "rule", "tags", "commitMsg", "author", "email", "file", "date"})
-			if err != nil {
-				return err
-			}
-			for _, leak := range report.Leaks {
-				err := w.Write([]string{leak.Repo, leak.Line, leak.Commit, leak.Offender, leak.LeakURL, leak.Rule, leak.Tags, leak.Message, leak.Author, leak.Email, leak.File, leak.Date.Format(time.RFC3339)})
-				if err != nil {
-					return err
-				}
-			}
-			w.Flush()
-		case "sarif":
-			s := Sarif{
-				Schema:  "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
-				Version: "2.1.0",
-				Runs: []Runs{
-					{
-						Tool: Tool{
-							Driver: Driver{
-								Name:            "Gitleaks",
-								SemanticVersion: version.Version,
-								Rules:           configToRules(cfg),
-							},
+		}
+		w.Flush()
+	case "sarif":
+		s := Sarif{
+			Schema:  "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+			Version: "2.1.0",
+			Runs: []Runs{
+				{
+					Tool: Tool{
+						Driver: Driver{
+							Name:            "Gitleaks",
+							SemanticVersion: version.Version,
+							Rules:           configToRules(cfg),
 						},
-						Results: leaksToResults(report.Leaks),
 					},
+					Results: leaksToResults(report.Leaks),
 				},
-			}
-			encoder := json.NewEncoder(file)
-			encoder.SetIndent("", " ")
-			err = encoder.Encode(s)
-			if err != nil {
-				return err
-			}
+			},
+		}
+		encoder := json.NewEncoder(file)
+		encoder.SetIndent("", " ")
+		err = encoder.Encode(s)
+		if err != nil {
+			return err
 		}
 	}
 

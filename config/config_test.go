@@ -38,7 +38,7 @@ func TestParse(t *testing.T) {
 			opts: options.Options{
 				ConfigPath: filepath.Join(configPath, "bad_aws_key.toml"),
 			},
-			wantErr: fmt.Errorf("Near line 7 (last key parsed 'rules.description'): expected value but found \"AWS\" instead"),
+			wantErr: fmt.Errorf("toml: line 7 (last key \"rules.description\"): expected value but found \"AWS\" instead"),
 		},
 		{
 			description: "test bad regex",
