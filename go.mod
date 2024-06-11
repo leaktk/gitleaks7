@@ -2,14 +2,12 @@ module github.com/leaktk/gitleaks7/v2
 
 go 1.16
 
-replace github.com/go-git/go-git/v5 => github.com/zricethezav/go-git/v5 v5.3.0
-
 require (
-	github.com/BurntSushi/toml v0.3.1
-	github.com/go-git/go-git/v5 v5.3.0
-	github.com/hako/durafmt v0.0.0-20191009132224-3f39dc1ed9f4
+	github.com/BurntSushi/toml v1.4.0
+	github.com/go-git/go-git/v5 v5.12.0
+	github.com/hako/durafmt v0.0.0-20210608085754-5c1018a4e16b
 	github.com/jessevdk/go-flags v1.5.0
-	github.com/sergi/go-diff v1.1.0
-	github.com/sirupsen/logrus v1.4.2
-	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
+	github.com/sergi/go-diff v1.3.2-0.20230802210424-5b0b94c5c0d3
+	github.com/sirupsen/logrus v1.9.3
+	golang.org/x/sync v0.7.0
 )
